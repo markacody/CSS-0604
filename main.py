@@ -1,4 +1,4 @@
-# -*- coding: utf-8 -*-
+
 from dash import Dash
 import dash_core_components as dcc
 import dash_html_components as html
@@ -24,4 +24,4 @@ app.layout = html.Div(children=[
 ])
 
 if __name__ == '__main__':
-    app.run_server()
+    app.run_server(host='0.0.0.0', port=8080, debug=True)
