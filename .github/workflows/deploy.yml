@@ -2,14 +2,13 @@ name: Deploy to Google App Engine
 
 on:
   workflow_run:
-    workflows: ["Python application"]
-    types:
-      - completed
+    workflows: [Python application]
+    types: [completed]
 
 jobs:
-  build:
-    name: GAE Deploy
+  on-success:
     runs-on: ubuntu-latest
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
     steps:
     - id: 'auth'
       uses: 'google-github-actions/auth@v0'
@@ -18,3 +17,10 @@ jobs:
 
     - id: 'deploy'
       uses: 'google-github-actions/deploy-appengine@v0'
+
+  on-failure:
+    runs-on: ubuntu-latest
+    if: ${{ github.event.workflow_run.conclusion == 'failure' }}
+    steps:
+      - run: echo 'The Python application CI failed"
+    
