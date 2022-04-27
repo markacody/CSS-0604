@@ -1,3 +1,9 @@
+on:
+  workflow_run:
+    workflows: ["Python application"]
+    types:
+      - completed
+
 jobs:
   job_id:
     steps:
