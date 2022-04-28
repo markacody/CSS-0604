@@ -1,28 +1,16 @@
+from flask import Flask
 
-import dash
-import dash_core_components as dcc
-import dash_html_components as html
 
-dash_app = dash.Dash()
-app = dash_app.server
+app = Flask(__name__)
 
-app.layout = html.Div(children=[
-    html.H1(children='Hello Dash'),
-    html.Div(children='Dash: A web application framework for Python.'),
 
-    dcc.Graph(
-        id='example-graph',
-        figure={
-            'data': [
-                {'x': [1, 2, 3], 'y': [4, 1, 2], 'type': 'bar', 'name': 'SF'},
-                {'x': [1, 2, 3], 'y': [2, 4, 5], 'type': 'bar', 'name': u'Montréal'},
-            ],
-            'layout': {
-                'title': 'Dash Data Visualization'
-            }
-        }
-    )
-])
+@app.route('/')
+def hello():
+    """Return a friendly HTTP greeting."""
+    return 'Hello World!'
+
 
 if __name__ == '__main__':
-    app.run_server(host='0.0.0.0', port=8080, debug=True)
+    # This is used when running locally only. When deploying to Google App
+    # Engine, a webserver process such as Gunicorn will serve the app.
+    app.run(host='0.0.0.0', port=8080, debug=True)
