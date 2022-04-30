@@ -12,3 +12,6 @@ test:
 
 lint:
 	pylint --disable=R,C scripts/*.py 
+	
+format:
+	black *.py
