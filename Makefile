@@ -9,6 +9,11 @@ freeze:
 
 test:
 	python -m pytest test/*.py
+	
+format:
+	black *.py
 
 lint:
 	pylint --disable=R,C scripts/*.py 
+	
+all: install lint test
