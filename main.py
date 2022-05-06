@@ -4,9 +4,8 @@ import dash_html_components as html
 
 dash_app = dash.Dash()
 app = dash_app.server
-server = app.server
 
-app.layout = html.Div(children=[
+dash_app.layout = html.Div(children=[
     html.H1(children='Hello Dash'),
     html.Div(children='Dash: A web application framework for Python.'),
 
@@ -25,4 +24,4 @@ app.layout = html.Div(children=[
 ])
 
 if __name__ == '__main__':
-    app.run_server(debug=True)
+    dash_app.run_server(debug=True)
