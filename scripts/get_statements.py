@@ -17,5 +17,5 @@ rlrs = RemoteLRS(endpoint=endpoint, username=appID, password=secretKey)
 raw_data = json.loads(rlrs.query_statements(query={'since':'2022-01-01T12:00:00.000'}).data)
 
 #Write json to file.
-with open('../data/statements.json', 'w') as statements:
+with open('../data/statements.json', 'w+',encoding='utf-8') as statements:
     json.dump(raw_data, statements)
