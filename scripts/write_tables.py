@@ -29,7 +29,7 @@ def write_course_table(df):
                 duration = pd.to_timedelta(df['result.duration']),
                 )
         .reset_index(drop=True) 
-        .to_csv('../data/course.csv', encoding='utf-8', index=False)
+        .to_csv('../data/course.csv', encoding='utf-8', index=True)
   )
 
 def write_quiz_table(df):
@@ -52,7 +52,7 @@ def write_quiz_table(df):
                 duration = pd.to_timedelta(df['result.duration']),
                 )
         .reset_index(drop=True) 
-        .to_csv('../data/quiz.csv', encoding='utf-8', index=False)
+        .to_csv('../data/quiz.csv', encoding='utf-8', index=True)
     )
 
 def write_questions_table(df):
@@ -78,7 +78,7 @@ def write_questions_table(df):
                 stored = pd.to_datetime(df.stored),
                 )
         .reset_index(drop=True) 
-        .to_csv('../data/questions.csv', encoding='utf-8', index=False)
+        .to_csv('../data/questions.csv', encoding='utf-8', index=True)
     )
 def write_usage_table(df):
     launched = df[df['verb.id'] == 'http://adlnet.gov/expapi/verbs/launched']
