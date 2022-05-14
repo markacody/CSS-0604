@@ -1,3 +1,15 @@
+.usage-container {
+    margin: 0;
+}
+.header {
+    margin: 0;
+}
 h2 {
-    padding: 1em;
+    margin: 1rem;
+}
+h5 {
+    margin: 1rem;
+}
+.intro-container {
+    margin-left: 1.5rem;
 }
