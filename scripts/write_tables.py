@@ -4,6 +4,7 @@ Read statements.json and create tables.
 #Import tincan and json.
 import json
 import pandas as pd
+import numpy as np
 
 #Open statements.json
 with open('../data/statements.json', 'r',   encoding='utf-8') as f:
@@ -55,6 +56,7 @@ def write_quiz_table(df):
         .to_csv('../data/quiz.csv', encoding='utf-8', index=True)
     )
 
+#QUESTIONS
 def write_questions_table(df):
     return (
         df[df['object.definition.type']=='http://adlnet.gov/expapi/activities/cmi.interaction']
@@ -80,15 +82,21 @@ def write_questions_table(df):
         .reset_index(drop=True) 
         .to_csv('../data/questions.csv', encoding='utf-8', index=True)
     )
+
+#USAGE
 def write_usage_table(df):
     launched = df[df['verb.id'] == 'http://adlnet.gov/expapi/verbs/launched']
     resumed = df[df['verb.id'] == 'http://adlnet.gov/expapi/verbs/resumed']
     initialized = df[df['verb.id'] == 'http://adlnet.gov/expapi/verbs/initialized']
     terminated = df[df['verb.id'] == 'http://adlnet.gov/expapi/verbs/terminated']
+    df = pd.concat([launched, resumed, initialized, terminated], axis=0)
     
-    return (pd.concat([launched, resumed, initialized, terminated], axis=0)
-    .drop(columns=['version',
+    return (df
+            .drop(columns=['version',
+                'stored',
                 'actor.objectType',
+                'actor.account.name',
+                'actor.account.homePage',
                 'context.contextActivities.category',
                 'context.contextActivities.category',
                 'context.contextActivities.grouping', 
@@ -113,11 +121,23 @@ def write_usage_table(df):
                 'object.definition.choices', 
                 'object.definition.interactionType'
               ])
-        .assign(timestamp = pd.to_datetime(df.timestamp),
-                stored = pd.to_datetime(df.stored),
+            .assign(timestamp = pd.to_datetime(df.timestamp),
+                verb = np.where(df['verb.id']=='http://adlnet.gov/expapi/verbs/launched','launched',df['verb.display.en-US']),
+                launched = np.where(df['verb.id']=='http://adlnet.gov/expapi/verbs/launched',1,0),
+                resumed = np.where(df['verb.id']=='http://adlnet.gov/expapi/verbs/resumed',1,0),
+                terminated = np.where(df['verb.id']=='http://adlnet.gov/expapi/verbs/terminated',1,0),
+                initialized = np.where(df['verb.id']=='http://adlnet.gov/expapi/verbs/initialized',1,0),
+                verbID = df['verb.id'].astype('category'),
+                date = pd.to_datetime(df['timestamp']).dt.date,
+                year = pd.to_datetime(df['timestamp']).dt.year,
+                month = pd.to_datetime(df['timestamp']).dt.month,
+                day = pd.to_datetime(df['timestamp']).dt.day,
+                dayName = pd.to_datetime(df['timestamp']).dt.day_name(),
+                hour = pd.to_datetime(df['timestamp']).dt.hour
                 )
-        .reset_index(drop=True) 
-        .to_csv('../data/usage.csv', encoding='utf-8', index=True)
+            .drop(columns = ['verb.id','verb.display.en-US','verb.display.en'])
+            .reset_index(drop=True)
+            .to_csv('../data/usage.csv', encoding='utf-8', index=True)
 )
 #ROUTINE
 write_course_table(data_df)

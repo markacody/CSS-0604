@@ -16,7 +16,7 @@ def create_navbar():
                 ],
             ),
         ],
-        brand="Home",
+        brand="Play Golf Association (PGA)",
         brand_href="/",
         sticky="top",
         color="dark",
