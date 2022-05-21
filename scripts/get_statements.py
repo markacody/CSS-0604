@@ -1,5 +1,6 @@
 '''
 API call to Production LRS 
+query={'since':'2022-01-01T12:00:00.000'}
 '''
 #Import tincan and json.
 from tincan.remote_lrs import RemoteLRS
@@ -14,7 +15,7 @@ endpoint = f'https://cloud.scorm.com/lrs/{appID}/'
 rlrs = RemoteLRS(endpoint=endpoint, username=appID, password=secretKey)
 
 #Send the API request with query. Convert response data to json and store in a variable.
-raw_data = json.loads(rlrs.query_statements(query={'since':'2022-01-01T12:00:00.000'}).data)
+raw_data = json.loads(rlrs.query_statements(query={'limit':0}).data)
 
 #Write json to file.
 with open('../data/statements.json', 'w+',encoding='utf-8') as statements:

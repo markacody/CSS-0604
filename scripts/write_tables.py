@@ -1,7 +1,7 @@
 '''
-Read statements.json and create tables.
+Read statements.json and create primary tables.
 '''
-#Import tincan and json.
+#Import json, pandas, and numpy.
 import json
 import pandas as pd
 import numpy as np
@@ -14,29 +14,51 @@ with open('../data/statements.json', 'r',   encoding='utf-8') as f:
 data_df = pd.json_normalize(data, record_path=['statements'])
 data_df.to_csv('../data/master.csv')
 
+#COURSE
 def write_course_table(df):
-    return (
-        df[df['object.id']=='http://id.tincanapi.com/activity/tincan-prototypes/golf-example']
-        .drop(columns=['context.contextActivities.category',
-                       'context.contextActivities.grouping',
-                       'context.contextActivities.parent',
-                       'result.response',
-                       'object.definition.correctResponsesPattern',
-                       'object.definition.choices', 
-                       'object.definition.interactionType']
+    df = df[df['object.id']=='http://id.tincanapi.com/activity/tincan-prototypes/golf-example']
+    return (df        
+            .drop(columns=['stored',
+                        'version',
+                        'actor.account.name',
+                        'actor.objectType',
+                        'authority.objectType',
+                        'authority.account.name',
+                        'actor.account.homePage',
+                        'authority.account.homePage',
+                        'context.contextActivities.category',
+                        'context.contextActivities.grouping',
+                        'context.contextActivities.parent',
+                        'result.response',
+                        'object.definition.correctResponsesPattern',
+                        'object.definition.choices', 
+                        'object.definition.interactionType',
+                        'verb.display.en']
               )
-        .assign(timestamp = pd.to_datetime(df.timestamp),
-                stored = pd.to_datetime(df.stored),
+            .assign(timestamp = pd.to_datetime(df.timestamp),
+                verb = df['verb.display.en-US'].fillna('launched'),
+                date = pd.to_datetime(df['timestamp']).dt.date,
+                year = pd.to_datetime(df['timestamp']).dt.year,
+                month = pd.to_datetime(df['timestamp']).dt.month,
+                day = pd.to_datetime(df['timestamp']).dt.day,
+                dayName = pd.to_datetime(df['timestamp']).dt.day_name(),
+                hour = pd.to_datetime(df['timestamp']).dt.hour,            
                 duration = pd.to_timedelta(df['result.duration']),
+                passed = np.where(df['verb.display.en-US']=='passed',1,0),
+                failed = np.where(df['verb.display.en-US']=='failed',1,0),
+                initialized = np.where(df['verb.display.en-US']=='initialized',1,0),
+                terminated = np.where(df['verb.display.en-US']=='terminated',1,0),
                 )
-        .reset_index(drop=True) 
-        .to_csv('../data/course.csv', encoding='utf-8', index=True)
-  )
+            .drop(columns = ['verb.display.en-US'])
+            .reset_index(drop=True) 
+            .to_csv('../data/course.csv', encoding='utf-8', index=True)
+    )
 
+#QUIZ
 def write_quiz_table(df):
-    return (
-        df[df['object.id']=='http://id.tincanapi.com/activity/tincan-prototypes/golf-example/GolfAssessment']
-        .drop(columns=['context.contextActivities.category',
+    df = df[df['object.id']=='http://id.tincanapi.com/activity/tincan-prototypes/golf-example/GolfAssessment']
+    return (df
+            .drop(columns=['context.contextActivities.category',
                        'context.contextActivities.grouping',
                        'context.contextActivities.parent',
                        'authority.name',
@@ -48,19 +70,19 @@ def write_quiz_table(df):
                        'object.definition.choices', 
                        'object.definition.interactionType']
               )
-        .assign(timestamp = pd.to_datetime(df.timestamp),
+            .assign(timestamp = pd.to_datetime(df.timestamp),
                 stored = pd.to_datetime(df.stored),
                 duration = pd.to_timedelta(df['result.duration']),
                 )
-        .reset_index(drop=True) 
-        .to_csv('../data/quiz.csv', encoding='utf-8', index=True)
+            .reset_index(drop=True) 
+            .to_csv('../data/quiz.csv', encoding='utf-8', index=True)
     )
 
 #QUESTIONS
 def write_questions_table(df):
-    return (
-        df[df['object.definition.type']=='http://adlnet.gov/expapi/activities/cmi.interaction']
-        .drop(columns=['context.contextActivities.category',
+    df = df[df['object.definition.type']=='http://adlnet.gov/expapi/activities/cmi.interaction']
+    return (df        
+            .drop(columns=['context.contextActivities.category',
                        'context.contextActivities.grouping',
                        'context.contextActivities.parent',
                        'object.definition.name.en-US',
@@ -76,11 +98,11 @@ def write_questions_table(df):
                        'result.completion'
                        ]
               )
-        .assign(timestamp = pd.to_datetime(df.timestamp),
+            .assign(timestamp = pd.to_datetime(df.timestamp),
                 stored = pd.to_datetime(df.stored),
                 )
-        .reset_index(drop=True) 
-        .to_csv('../data/questions.csv', encoding='utf-8', index=True)
+            .reset_index(drop=True) 
+            .to_csv('../data/questions.csv', encoding='utf-8', index=True)
     )
 
 #USAGE

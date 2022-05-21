@@ -13,3 +13,7 @@ h5 {
 .intro-container {
     margin-left: 1.5rem;
 }
+table {
+    margin-left: 60px;
+    max-width: 900px;
+}
