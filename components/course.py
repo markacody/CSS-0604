@@ -53,8 +53,7 @@ def display_course():
                     ' minutes. Max: ', duration_max, 
                     ' minutes. Average: ', duration_average,
                     ' minutes.' 
-                    ]),
-                
+                    ]),                
             ]),
             html.Div([
                 dash_table.DataTable(

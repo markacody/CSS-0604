@@ -58,22 +58,37 @@ def write_course_table(df):
 def write_quiz_table(df):
     df = df[df['object.id']=='http://id.tincanapi.com/activity/tincan-prototypes/golf-example/GolfAssessment']
     return (df
-            .drop(columns=['context.contextActivities.category',
-                       'context.contextActivities.grouping',
-                       'context.contextActivities.parent',
-                       'authority.name',
-                       'authority.objectType',
-                       'authority.account.name',
-                       'authority.account.homePage',
-                       'result.response',
-                       'object.definition.correctResponsesPattern',
-                       'object.definition.choices', 
-                       'object.definition.interactionType']
-              )
+            .drop(columns=['stored',
+                        'version',
+                        'actor.objectType',
+                        'actor.account.name',
+                        'actor.account.homePage',
+                        'context.contextActivities.category',
+                        'context.contextActivities.grouping',
+                        'context.contextActivities.parent',
+                        'authority.name',
+                        'authority.objectType',
+                        'authority.account.name',
+                        'authority.account.homePage',
+                        'result.response',
+                        'verb.display.en',
+                        'object.objectType',
+                        'object.definition.correctResponsesPattern',
+                        'object.definition.choices', 
+                        'object.definition.interactionType']
+            )
             .assign(timestamp = pd.to_datetime(df.timestamp),
-                stored = pd.to_datetime(df.stored),
-                duration = pd.to_timedelta(df['result.duration']),
-                )
+                    date = pd.to_datetime(df['timestamp']).dt.date,
+                    year = pd.to_datetime(df['timestamp']).dt.year,
+                    month = pd.to_datetime(df['timestamp']).dt.month,
+                    day = pd.to_datetime(df['timestamp']).dt.day,
+                    dayName = pd.to_datetime(df['timestamp']).dt.day_name(),
+                    hour = pd.to_datetime(df['timestamp']).dt.hour, 
+                    duration = pd.to_timedelta(df['result.duration']),
+                    passed = np.where(df['verb.display.en-US']=='passed',1,0),
+                    failed = np.where(df['verb.display.en-US']=='failed',1,0),
+                    attempted = np.where(df['verb.display.en-US']=='attempted',1,0),
+            )
             .reset_index(drop=True) 
             .to_csv('../data/quiz.csv', encoding='utf-8', index=True)
     )
@@ -82,25 +97,40 @@ def write_quiz_table(df):
 def write_questions_table(df):
     df = df[df['object.definition.type']=='http://adlnet.gov/expapi/activities/cmi.interaction']
     return (df        
-            .drop(columns=['context.contextActivities.category',
-                       'context.contextActivities.grouping',
-                       'context.contextActivities.parent',
-                       'object.definition.name.en-US',
-                       'authority.name',
-                       'authority.objectType',
-                       'authority.account.name',
-                       'authority.account.homePage',
-                       'result.duration',
-                       'result.score.scaled',
-                       'result.score.raw',
-                       'result.score.min',
-                       'result.score.max',
-                       'result.completion'
+            .drop(columns=['stored',
+                        'version',
+                        'actor.objectType',
+                        'actor.account.name',
+                        'actor.account.homePage',
+                        'context.contextActivities.category',
+                        'context.contextActivities.grouping',
+                        'context.contextActivities.parent',
+                        'object.definition.name.en-US',
+                        'object.objectType',
+                        'authority.name',
+                        'authority.objectType',
+                        'authority.account.name',
+                        'authority.account.homePage',
+                        'result.duration',
+                        'result.score.scaled',
+                        'result.score.raw',
+                        'result.score.min',
+                        'result.score.max',
+                        'result.completion',
+                        'verb.display.en'
                        ]
-              )
+            )
             .assign(timestamp = pd.to_datetime(df.timestamp),
-                stored = pd.to_datetime(df.stored),
-                )
+                total = np.where(df['verb.display.en-US']=='answered',1,0),
+                correct = np.where(df['result.success']==True,1,0),
+                incorrect = np.where(df['result.success']==False,1,0)
+            )
+            .rename(columns = {
+                'object.definition.description.en-US':'question',
+                'object.definition.correctResponsesPattern':'correct.response',
+                'object.definition.choices':'choices',
+                'verb.display.en-US': 'answered'
+            })
             .reset_index(drop=True) 
             .to_csv('../data/questions.csv', encoding='utf-8', index=True)
     )
