@@ -42,7 +42,7 @@ def display_usage():
         children = [
             html.Div(className='header',children=[nav, course_title, header]),
             html.Div(className='intro-container',children=[
-                html.P(className='intro-text',children='Usage analytics are traffic counts, comprised of learners who enter, exit, and come back to the course.'),
+                html.P(className='intro-text',children='Usage analytics are traffic counts, comprised of learners who enter, exit, and come back to the course. Results range from 5/8 through 5/15/2022.'),
                 html.P(className='intro-text',children=[
                     'Total Access: ',total_learners,
                     ' learners. Learners who accessed the course one time: ',

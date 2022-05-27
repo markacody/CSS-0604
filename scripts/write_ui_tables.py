@@ -15,11 +15,10 @@ def write_course_ui_table(df):
     df['duration'] = pd.to_timedelta(df['duration'])
     df['date'] = pd.to_datetime(df['date'])
     return (df
-            .pivot_table(values=['passed', 'failed', 'initialized', 'terminated','duration','date','dayName'], 
+            .pivot_table(values=['passed', 'failed', 'terminated','duration','date','dayName'], 
                        index=['actor.name'],
                        aggfunc={'passed': np.sum,
                              'failed': np.sum,
-                             'initialized': np.sum,
                              'terminated': np.sum,
                              'duration': np.max,
                              'date': np.max,

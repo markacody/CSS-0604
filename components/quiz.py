@@ -40,7 +40,7 @@ def display_quiz():
         children = [
             html.Div(className='header',children=[nav, course_title, header]),
             html.Div(className='intro-container', children=[
-                html.P(className='intro-text', children='Quiz analytics are comprised of (1) aggregated results, scores, and durations; (2) a distribution of quiz scores, and (3) all questions with total correct and incorrect responses for each one.'),
+                html.P(className='intro-text', children='Quiz analytics are comprised of (1) aggregated results, scores, and durations; (2) a distribution of quiz scores, and (3) all questions with total correct and incorrect responses for each one. Results range from 5/8 through 5/15/2022.'),
                 html.P(className='quiz_totals',children=[
                     'Total unique learners: ',unique_learners,
                     '. Passed: ', passed, 
@@ -57,7 +57,8 @@ def display_quiz():
                     'Scores. Min: ', min_score,
                     '%. Max: ', max_score, 
                     '%. Average: ', average_score,
-                    '%.' 
+                    '%. Pass threshold: 80', 
+                    '%. 12 of 15.' 
                     ]),
                 html.P(className='quiz_durations',children=[
                     'Durations. Min: ', duration_min,

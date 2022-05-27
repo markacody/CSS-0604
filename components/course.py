@@ -5,12 +5,15 @@ import dash_bootstrap_components as dbc
 import pandas as pd
 import numpy as np
 from components.navbar import create_navbar
+import humanize
+from humanize.time import precisedelta
 
 #Read course data and course UI table data
 course_data = pd.read_csv('data/course.csv')
 course_data['duration'] = pd.to_timedelta(
 course_data['duration'])
 course_ui_data = pd.read_csv('data/course_ui_table.csv', index_col = [0])
+durations = course_data.pivot_table(values=['duration'], index='actor.name', aggfunc={'duration':np.max})
 
 #Calculate statistics for display
 passed = course_data['passed'].sum()
@@ -19,9 +22,9 @@ unique_learners = course_data['actor.name'].nunique()
 in_progress = unique_learners - passed - failed
 completion_rate = ((passed + failed) / unique_learners) * 100
 pass_rate = np.round((passed / unique_learners)*100,2)
-duration_min = course_data['duration'][course_data['duration'] !='0 days 00:00:00'].min().total_seconds() //60
-duration_max = course_data['duration'].max().total_seconds() // 60
-duration_average = course_data['duration'].mean().total_seconds() // 60
+duration_min = durations.min().apply(humanize.naturaldelta)[0]
+duration_max = durations.max().apply(humanize.naturaldelta)[0]
+duration_average = durations.mean().apply(humanize.naturaldelta)[0]
 
 #Name and define page components
 nav = create_navbar()
@@ -35,7 +38,7 @@ def display_course():
         children = [
             html.Div(className='header',children=[nav, course_title, header]),
             html.Div(className='intro-container', children=[
-                html.P(className='intro-text', children='Course analytics are comprised of all learners, completions, and failures.'),
+                html.P(className='intro-text', children='Course analytics are comprised of all learners, completions, and failures. Results range from 5/8 through 5/15/2022.'),
                 html.P(className='course_totals',children=[
                     'Total unique learners: ',unique_learners,
                     '. Passed: ', passed, 
@@ -50,9 +53,9 @@ def display_course():
                     ]),
                 html.P(className='course_durations',children=[
                     'Durations. Min: ', duration_min,
-                    ' minutes. Max: ', duration_max, 
-                    ' minutes. Average: ', duration_average,
-                    ' minutes.' 
+                    '. Max: ', duration_max, 
+                    '. Average: ', duration_average,
+                    '.' 
                     ]),                
             ]),
             html.Div([
