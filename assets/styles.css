@@ -17,3 +17,20 @@ table {
     margin-left: 60px;
     max-width: 900px;
 }
+.navbar-brand {
+    margin-left: 70px;
+}
+.nav-link {
+    font-size: 1.35em;
+}
+.navbar {
+    background-image: url(../assets/logo.png);
+    background-repeat: no-repeat;
+    background-size: 60px;
+    background-position: 1rem center;
+}
+#image-container {
+    margin-top: -140px;
+    margin-left: 40px;
+    width: 70%;
+}
