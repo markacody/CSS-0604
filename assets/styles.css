@@ -21,7 +21,7 @@ table {
     margin-left: 70px;
 }
 .nav-link {
-    font-size: 1.35em;
+    font-size: 1.25rem;
 }
 .navbar {
     background-image: url(../assets/logo.png);
@@ -31,6 +31,5 @@ table {
 }
 #image-container {
     margin-top: -140px;
-    margin-left: 40px;
-    width: 70%;
+    margin-left: 80px;
 }
