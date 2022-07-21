@@ -1,8 +1,8 @@
 # Learning Analytics Dashboard
 
-Architect, Designer, and Developer: Mark Cody
-Developer: Nathan Single
-Project Manager: Kristina Sweiringa
+- Architect, Designer, and Developer: Mark Cody
+- Analyst, Developer: Nathan Single
+- Project Manager: Kristina Sweiringa
 
 ### Technology Stack:
 
