@@ -16,9 +16,7 @@ Project Manager: Kristina Sweiringa
 - Github Actions, Secrets, Workflow
 - Google Cloud App Engine
 
-[![Python application](https://github.com/markacody/CSS-0604/actions/workflows/python-app.yml/badge.svg)](https://github.com/markacody/CSS-0604/actions/workflows/python-app.yml)
-
-### Reference Sites
+### Reference Sites:
 
 - Pytest https://docs.pytest.org/en/7.1.x/
 - Pylint https://pylint.pycqa.org/en/latest/
@@ -26,3 +24,6 @@ Project Manager: Kristina Sweiringa
 - Github Actions https://docs.github.com/en
 - Python Command Line: https://docs.python.org/3/using/cmdline.html
 - Dash/Plotly https://dash.plotly.com/
+
+
+[![Python application](https://github.com/markacody/CSS-0604/actions/workflows/python-app.yml/badge.svg)](https://github.com/markacody/CSS-0604/actions/workflows/python-app.yml)
